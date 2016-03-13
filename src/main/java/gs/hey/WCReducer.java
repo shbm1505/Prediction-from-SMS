@@ -23,8 +23,8 @@ public class WCReducer extends
 
       public void reduce(Text key, Text values, Context context) throws IOException
       {
-    	  Text smskey=new Text();
-    	  Text smsinfo=new Text();
+    	  Text smskey=key;
+    	  Text smsinfo=values;
     
     
              try {

@@ -26,8 +26,7 @@ public class WCMapper extends Mapper<LongWritable, Text, Text, Text>
 	String attribute=" ";
 	String st;
 	String substring[]=new String [20];
-	
-	
+		
  public void map(LongWritable key, Text value, Context context) throws IOException
       {
     line = value.toString();
@@ -383,22 +382,37 @@ public class WCMapper extends Mapper<LongWritable, Text, Text, Text>
    			} 
 
    		}
+   	  if(userid.equals("ldcssms") || userid.equals("hanuman") || userid.equals("magnasoft")||userid.equals("netlink")||userid.equals("vj_vpsps")||userid.equals("stardotstarnon")||userid.equals("rimsmum"))
+   	  {
+   		priority=1;
+   		attribute="has kids";
+   		val="Yes";
+   		try {
+   				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+   		
+   			} catch (InterruptedException e) {
+   		
+   				e.printStackTrace();
+   			} 
+   	  }
      }
      public void income(String st,String smsid,String phoneno,String time,Context context) throws IOException
      {
-   	  String smstxt=st;
+   	      String smstxt=st;
     	  String sid=smsid;
     	  String pno=phoneno;
     	  String t=time;
+    	  String s;
+    	  int salaryamt;
+    	  attribute="income";
     	 
-   	  if(smstxt.contains("Salary")&&smstxt.contains("is credited with INR"))                                                     //life insurance
+   	  if(smstxt.contains("salary")&&smstxt.contains("is credited with inr"))                                                     //life insurance
    		{
    		priority=1;
-   		attribute="life insurance";
-   		val="Yes";
-   		String s = smstxt.substring(smstxt.indexOf("is credited with INR") + 1, smstxt.indexOf(" on"));
-   		int salaryamt = Integer.parseInt(s);
-   		int spy=salaryamt*12;
+   		s = smstxt.substring(smstxt.indexOf("is credited with inr") + 20, smstxt.indexOf(" on"));
+   		
+   		salaryamt = Integer.parseInt(s);
+   		val=range(salaryamt);
    		
    		try {
    				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
@@ -409,6 +423,148 @@ public class WCMapper extends Mapper<LongWritable, Text, Text, Text>
    			} 
 
    		}
+   	 if(smstxt.contains("salary")&&smstxt.contains("is credited with rs"))                                                     //life insurance
+		{
+		priority=1;
+		s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+		
+		salaryamt = Integer.parseInt(s);
+		val=range(salaryamt);
+		
+		try {
+				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+		
+			} catch (InterruptedException e) {
+		
+				e.printStackTrace();
+			} 
+
+		}
+   	if(smstxt.contains("credited with salary inr "))                                                     //life insurance
+	{
+	priority=1;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("credited with salary inr ") + 25, smstxt.indexOf(" on"));
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+
+	}
+ 	if(smstxt.contains("credited with Rs.")&&smstxt.contains("net salary"))                                                     //life insurance
+	{
+	priority=1;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("credited with Rs.") + 17, smstxt.indexOf(" on"));
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+
+	}
+ 	
+	if(smstxt.contains(" has been credited by inr ")&&smstxt.contains("info- by salary"))                                                     //life insurance
+	{
+	priority=1;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("has been credited by inr ") + 25, smstxt.indexOf(" on"));
+	
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+
+	}
+	if(smstxt.contains("ecs of inr ")&&smstxt.contains("trust-salary"))                                                     //life insurance
+	{
+	priority=1;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("ecs of inr ") + 11, smstxt.indexOf(" from"));
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+
+	}
+	if(smstxt.contains("info: brn-salary payment-salary")|| smstxt.contains("info: inb/ift/neel sys india priva/salary jan"))                                                     //life insurance
+	{
+	priority=1;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("is credited rs ") + 15, smstxt.indexOf(" on"));
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+
+	}
+	
+	
+	
+	
+
+	if(smstxt.contains("emi of rs."))                                                     //life insurance
+	{
+	priority=2;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("emi of rs.") + 10, smstxt.indexOf("/-"));
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+
+	}
+	if(smstxt.contains("emi of inr "))                                                     //life insurance
+	{
+	priority=2;
+	//s = smstxt.substring(smstxt.indexOf("is credited with Rs.") + 20, smstxt.indexOf(" towards"));
+	s = smstxt.substring(smstxt.indexOf("emi of inr ") + 10, smstxt.indexOf("/-"));
+	salaryamt = Integer.parseInt(s);
+	val=range(salaryamt);
+	
+	try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+		}	  
      }
      
      public String range(int amt)
@@ -442,12 +598,8 @@ public class WCMapper extends Mapper<LongWritable, Text, Text, Text>
     	 else if(spy>6000000 && spy <=10000000)
     		 return "60L-1CR";
     	 else
-    		 return "1CR+";
-    	 
-    
-    	 
+    		 return "1CR+"; 
      }
-     
      
       public void life_insurance(String st,String smsid,String phoneno,String time,Context context) throws IOException
       {
@@ -526,7 +678,7 @@ public void home_loan(String st,String smsid,String phoneno,String time,Context 
 	  String pno=phoneno;
 	  String t=time;
 	 
-	if(smstxt.contains("Home Loan"))                                                     //home loan
+	if(smstxt.contains("home loan"))                                                     //home loan
 	{
 	priority=1;
 	attribute="home loan";
@@ -540,6 +692,20 @@ public void home_loan(String st,String smsid,String phoneno,String time,Context 
 		} 
 
 	}
+	if(userid=="lichfl" || userid=="pnb hrf" || userid=="bharat benz financial")
+	{
+		priority=1;
+		attribute="home loan";
+		val="Yes";
+		try {
+			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
+	
+		} catch (InterruptedException e) {
+	
+			e.printStackTrace();
+		} 
+	}
+	
 
    
       
@@ -573,7 +739,7 @@ public void gender(String st,String smsid,String phoneno,String time,Context con
 	  String pno=phoneno;
 	  String t=time;
 	 
-	   if(smstxt.startsWith("dear mr.")||smstxt.startsWith("dear sir")||smstxt.startsWith("dear mr.")||smstxt.startsWith("dear salesperson")||smstxt.startsWith("dear mr."))// gender attribute
+	   if(smstxt.contains("dear mr. ")||smstxt.contains("dear sir")||smstxt.contains("dear salesperson")||smstxt.contains("dear mr.")||smstxt.contains("hi sir")||smstxt.contains("hi uncle")||smstxt.contains("hi bhaiya")||smstxt.contains("hi bro")||smstxt.contains("hi brother")||smstxt.contains("hi father")||smstxt.contains("hi papa")||smstxt.contains("hi dad")||smstxt.contains("hi pa")||smstxt.contains("hi dady")||smstxt.contains("hi jiju")||smstxt.contains("hi mama")||smstxt.contains("hi chacha")||smstxt.contains("hi tau")||smstxt.contains("hi bhai")||smstxt.contains("hi ladke")||smstxt.contains("hi mr.")||smstxt.contains("hey sir")||smstxt.contains("hey uncle")||smstxt.contains("hey bhaiya")||smstxt.contains("hey bro")||smstxt.contains("hey didi")||smstxt.contains("hey brother")||smstxt.contains("hey father")||smstxt.contains("hey papa")||smstxt.contains("hey dad")||smstxt.contains("hey pa")||smstxt.contains("hi dady")||smstxt.contains("hey jiju")||smstxt.contains("hey mama")||smstxt.contains("hey chacha")||smstxt.contains("hey tau")||smstxt.contains("hey bhai")||smstxt.contains("hey ladke")||smstxt.contains("hello sir")||smstxt.contains("hello uncle")||smstxt.contains("hello bhaiya")||smstxt.contains("hello bro")||smstxt.contains("hello brother")||smstxt.contains("hello father")||smstxt.contains("hello papa")||smstxt.contains("hello dad")||smstxt.contains("hello pa ")||smstxt.contains("hello dady")||smstxt.contains("hello jiju")||smstxt.contains("hello mama")||smstxt.contains("hello chacha")||smstxt.contains("hello tau")||smstxt.contains("hello bhai")||smstxt.contains("hello ladke")||smstxt.contains("aur mote")||smstxt.contains("aur londe"))// gender attribute
  	    {
  	    	priority=1;
  	    	val="male";
@@ -586,20 +752,7 @@ public void gender(String st,String smsid,String phoneno,String time,Context con
  				e.printStackTrace();
  			} 
  	    }
- 	    else if(smstxt.startsWith("hi sir")||smstxt.startsWith("hi uncle")||smstxt.startsWith("hi bhaiya")||smstxt.startsWith("hi bro")||smstxt.startsWith("hi brother")||smstxt.startsWith("hi father")||smstxt.startsWith("hi papa")||smstxt.startsWith("hi dad")||smstxt.startsWith("hi pa")||smstxt.startsWith("hi dady")||smstxt.startsWith("hi jiju")||smstxt.startsWith("hi mama")||smstxt.startsWith("hi chacha")||smstxt.startsWith("hi tau")||smstxt.startsWith("hi bhai")||smstxt.startsWith("hi ladke")||smstxt.startsWith("hi mr."))
- 	    {
- 	    	priority=1;
- 	    	val="male";
- 	    	attribute="gender";
- 	    	try {
- 				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
- 	  	
- 			} catch (InterruptedException e) {
- 		
- 				e.printStackTrace();
- 			} 
- 	    }
- 	    else if(smstxt.startsWith("hi mumma")||smstxt.startsWith("hi mummy")||smstxt.startsWith("hi mom")||smstxt.startsWith("hi di")||smstxt.startsWith("hi sis")||smstxt.startsWith("hi didi")||smstxt.startsWith("hi bua")||smstxt.startsWith("hi bhabhi")||smstxt.startsWith("hi behen ")||smstxt.startsWith("hi behna")||smstxt.startsWith("hi behenji")||smstxt.startsWith("hi aunty")||smstxt.startsWith("hi chachi")||smstxt.startsWith("hi ladki")||smstxt.startsWith("hi mam")||smstxt.startsWith("hi madam")){
+ 	    else if(smstxt.contains("hi mumma")||smstxt.contains("hi mummy")||smstxt.contains("hi mom")||smstxt.contains("hi di")||smstxt.contains("hi sis")||smstxt.contains("hi didi")||smstxt.contains("hi bua")||smstxt.contains("hi bhabhi")||smstxt.contains("hi behen ")||smstxt.contains("hi behna")||smstxt.contains("hi behenji")||smstxt.contains("hi aunty")||smstxt.contains("hi chachi")||smstxt.contains("hi ladki")||smstxt.contains("hi mam")||smstxt.contains("hi madam")||smstxt.contains("hey mumma")||smstxt.contains("hey mummy")||smstxt.contains("hey mom")||smstxt.contains("hey di")||smstxt.contains("hey sis")||smstxt.contains("hey didi")||smstxt.contains("hey bua")||smstxt.contains("hey bhabhi")||smstxt.contains("hey behen ")||smstxt.contains("hey behna")||smstxt.contains("hey behenji")||smstxt.contains("hey aunty")||smstxt.contains("hey chachi")||smstxt.contains("hey ladki")||smstxt.contains("hey mam")||smstxt.contains("hey madam")||smstxt.contains("hey madam")||smstxt.contains("dear mrs.")||smstxt.contains("dear mam")||smstxt.contains("dear madam")||smstxt.contains("dear ms.")||smstxt.contains("aur moti")){
  	    	priority=1;
  	    	val="female";
  	    	attribute="gender";
@@ -611,88 +764,6 @@ public void gender(String st,String smsid,String phoneno,String time,Context con
  				e.printStackTrace();
  			} 
  	    }
- 	    else if(smstxt.startsWith("hey sir")||smstxt.startsWith("hey uncle")||smstxt.startsWith("hey bhaiya")||smstxt.startsWith("hey bro")||smstxt.startsWith("hey didi")||smstxt.startsWith("hey brother")||smstxt.startsWith("hey father")||smstxt.startsWith("hey papa")||smstxt.startsWith("hey dad")||smstxt.startsWith("hey pa")||smstxt.startsWith("hi dady")||smstxt.startsWith("hey jiju")||smstxt.startsWith("hey mama")||smstxt.startsWith("hey chacha")||smstxt.startsWith("hey tau")||smstxt.startsWith("hey bhai")||smstxt.startsWith("hey ladke"))
- 	    {
- 	    	priority=1;
- 	    	val="male";
- 	    	attribute="gender";
- 	    	try {
- 				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
- 	  	
- 			} catch (InterruptedException e) {
- 		
- 				e.printStackTrace();
- 			} 
- 	    }
- 	  else if(smstxt.startsWith("hello sir")||smstxt.startsWith("hello uncle")||smstxt.startsWith("hello bhaiya")||smstxt.startsWith("hello bro")||smstxt.startsWith("hello brother")||smstxt.startsWith("hello father")||smstxt.startsWith("hello papa")||smstxt.startsWith("hello dad")||smstxt.startsWith("hello pa ")||smstxt.startsWith("hello dady")||smstxt.startsWith("hello jiju")||smstxt.startsWith("hello mama")||smstxt.startsWith("hello chacha")||smstxt.startsWith("hello tau")||smstxt.startsWith("hello bhai")||smstxt.startsWith("hello ladke"))
-	    {
-	    	priority=1;
-	    	val="male";
-	    	attribute="gender";
-	    	try {
-				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
-	  	
-			} catch (InterruptedException e) {
-		
-				e.printStackTrace();
-			} 
-	    }
- 	
- 	else if(smstxt.startsWith("hey mumma")||smstxt.startsWith("hey mummy")||smstxt.startsWith("hey mom")||smstxt.startsWith("hey di")||smstxt.startsWith("hey sis")||smstxt.startsWith("hey didi")||smstxt.startsWith("hey bua")||smstxt.startsWith("hey bhabhi")||smstxt.startsWith("hey behen ")||smstxt.startsWith("hey behna")||smstxt.startsWith("hey behenji")||smstxt.startsWith("hey aunty")||smstxt.startsWith("hey chachi")||smstxt.startsWith("hey ladki")||smstxt.startsWith("hey mam")||smstxt.startsWith("hey madam")||smstxt.startsWith("hey madam")){
-	    	priority=1;
-	    	val="female";
-	    	attribute="gender";
-	    	try {
-				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
-	  	
-			} catch (InterruptedException e) {
-		
-				e.printStackTrace();
-			} 
-	    }
- 	else if(smstxt.startsWith("dear mrs.")||smstxt.startsWith("dear mam")||smstxt.startsWith("dear madam")||smstxt.startsWith("dear ms."))
-	    {
-	    	priority=1;
-	    	val="female";
-	    	attribute="gender";
-	    	try {
-				context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
-	  	
-			} catch (InterruptedException e) {
-		
-				e.printStackTrace();
-			} 
-	    }
- 	    
- 	else if(smstxt.startsWith("aur mote")||smstxt.startsWith("aur londe"))
-    {
-    	priority=1;
-    	val="male";
-    	attribute="gender";
-    	
-    	try {
-			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
-  	
-		} catch (InterruptedException e) {
-	
-			e.printStackTrace();
-		} 
-    }
- 	else if(smstxt.startsWith("aur moti"))
-    {
-    	priority=1;
-    	val="female";
-    	attribute="gender";
-    	
-    	try {
-			context.write(new Text(sid), new Text(pno+"\t"+t+"\t"+attribute+"\t"+val+"\t"+priority));
-  	
-		} catch (InterruptedException e) {
-	
-			e.printStackTrace();
-		} 
-    	
-    }
 /*  	else if((st.startsWith("dear")||st.startsWith("hi")||st.startsWith("hello")||st.startsWith("hey"))&&(substring[1]!="customer")&&(substring[1]!="executive")&&(substring[1]!="student")){
  		
  	int	l=substring[1].length();
